@@ -34,23 +34,19 @@ def custom_score(game, player):
     float
         The heuristic value of the current game state to the specified player.
     """
-    if game.is_loser(player):
-        return float("-inf")
-    if game.is_winner(player):
+    oppenent = game.get_opponent(player)
+    opponent_moves = game.get_legal_moves(oppenent)
+    player_moves = game.get_legal_moves(player)
+    if not opponent_moves:
         return float("inf")
-    p1_lr, p1_lc = game.__last_player_move__[game.__player_1__]
-    p2_lr, p2_lc = game.__last_player_move__[game.__player_2__]
-
-    own_moves = game.get_legal_moves(player)
-    opponent_moves = game.get_legal_moves(game.get_opponent(player))
-    own_difference = set(own_moves).difference(set(opponent_moves))
-    opponent_difference = set(opponent_moves).difference(set(own_moves))
-    result = float(len(own_moves) - 3*len(opponent_difference) +
-                   0.5*(abs(p1_lr-p2_lr) + abs(p1_lc-p2_lc)))
+    if not player_moves:
+        return float("-inf")
+    player_moves = len(player_moves)
+    opponent_moves = len(opponent_moves)
+    result = float(player_moves/(1+opponent_moves**2))
 
     return result
-
-
+    
 
 
 def custom_score_2(game, player):
@@ -76,14 +72,18 @@ def custom_score_2(game, player):
         The heuristic value of the current game state to the specified player.
     """
     oppenent = game.get_opponent(player)
-    opponent_moves = game.get_legal_moves(opp)
-    player_moves = game.get_legal_moves()
+    opponent_moves = game.get_legal_moves(oppenent)
+    player_moves = game.get_legal_moves(player)
     if not opponent_moves:
         return float("inf")
     if not player_moves:
         return float("-inf")
-    
-    return 
+
+    player_moves = len(game.get_legal_moves(player))
+    opponent_moves = len(game.get_legal_moves(game.get_opponent(player)))
+    result = float(player_moves**2/(1+opponent_moves))
+    return result
+
 
 
 def custom_score_3(game, player):
@@ -108,8 +108,18 @@ def custom_score_3(game, player):
     float
         The heuristic value of the current game state to the specified player.
     """
-    # TODO: finish this function!
-    raise NotImplementedError
+    oppenent = game.get_opponent(player)
+    opponent_moves = game.get_legal_moves(oppenent)
+    player_moves = game.get_legal_moves(player)
+    if not opponent_moves:
+        return float("inf")
+    if not player_moves:
+        return float("-inf")
+
+    player_moves = len(game.get_legal_moves(player))
+    opponent_moves = len(game.get_legal_moves(game.get_opponent(player)))
+    result = float(player_moves**2/(1+opponent_moves**2))
+    return result
 
 
 class IsolationPlayer:
