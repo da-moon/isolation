@@ -10,7 +10,7 @@ class SearchTimeout(Exception):
     pass
 
 
-def custom_score(game, player,player_multiplier = 0 , opponent_multiplier =2):
+def custom_score(game, player,player_factor = 1 , opponent_factor =3):
     """Calculate the heuristic value of a game state from the point of view
     of the given player.
 
@@ -34,7 +34,6 @@ def custom_score(game, player,player_multiplier = 0 , opponent_multiplier =2):
     float
         The heuristic value of the current game state to the specified player.
     """
-    # TODO: finish this function!
     if game.is_loser(player):
         return float("-inf")
 
@@ -43,44 +42,10 @@ def custom_score(game, player,player_multiplier = 0 , opponent_multiplier =2):
 
     player_moves = len(game.get_legal_moves(player))
     opponent_moves = len(game.get_legal_moves(game.get_opponent(player)))
-    return float((player_moves**player_multiplier) - (opponent_moves**opponent_multiplier))
+    return float((player_moves**player_factor) - (opponent_moves**opponent_factor))
 
 
-def custom_score_2(game, player,player_multiplier=1, opponent_multiplier=1):
-    """Calculate the heuristic value of a game state from the point of view
-    of the given player.
-
-    Note: this function should be called from within a Player instance as
-    `self.score()` -- you should not need to call this function directly.
-
-    Parameters
-    ----------
-    game : `isolation.Board`
-        An instance of `isolation.Board` encoding the current state of the
-        game (e.g., player locations and blocked cells).
-
-    player : object
-        A player instance in the current game (i.e., an object corresponding to
-        one of the player objects `game.__player_1__` or `game.__player_2__`.)
-
-    Returns
-    -------
-    float
-        The heuristic value of the current game state to the specified player.
-    """
-    # TODO: finish this function!
-    if game.is_loser(player):
-        return float("-inf")
-
-    if game.is_winner(player):
-        return float("inf")
-
-    player_moves = len(game.get_legal_moves(player))
-    opponent_moves = len(game.get_legal_moves(game.get_opponent(player)))
-    return float((player_moves**player_multiplier) - (opponent_moves**opponent_multiplier))
-
-
-def custom_score_3(game, player, player_multiplier=3, opponent_multiplier=0):
+def custom_score_2(game, player,player_factor=1, opponent_factor=3):
     """Calculate the heuristic value of a game state from the point of view
     of the given player.
 
@@ -110,7 +75,40 @@ def custom_score_3(game, player, player_multiplier=3, opponent_multiplier=0):
 
     player_moves = len(game.get_legal_moves(player))
     opponent_moves = len(game.get_legal_moves(game.get_opponent(player)))
-    return float((player_moves**player_multiplier) - (opponent_moves**opponent_multiplier))
+    return float((player_moves*player_factor) - (opponent_moves*opponent_factor))
+
+
+def custom_score_3(game, player, player_factor=1, opponent_factor=3):
+    """Calculate the heuristic value of a game state from the point of view
+    of the given player.
+
+    Note: this function should be called from within a Player instance as
+    `self.score()` -- you should not need to call this function directly.
+
+    Parameters
+    ----------
+    game : `isolation.Board`
+        An instance of `isolation.Board` encoding the current state of the
+        game (e.g., player locations and blocked cells).
+
+    player : object
+        A player instance in the current game (i.e., an object corresponding to
+        one of the player objects `game.__player_1__` or `game.__player_2__`.)
+
+    Returns
+    -------
+    float
+        The heuristic value of the current game state to the specified player.
+    """
+    if game.is_loser(player):
+        return float("-inf")
+
+    if game.is_winner(player):
+        return float("inf")
+
+    player_moves = len(game.get_legal_moves(player))
+    opponent_moves = len(game.get_legal_moves(game.get_opponent(player)))
+    return float((player_moves**player_factor) / (opponent_moves**opponent_factor))
 
 
 class IsolationPlayer:
